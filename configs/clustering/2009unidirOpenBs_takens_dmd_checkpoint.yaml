@@ -1,0 +1,45 @@
+# Experiment documentation: http://ped.fz-juelich.de/da/2009unidirOpen
+# Input orientation: people walking downwards through the bottleneck
+# hence we only want to cut from the top and bottom, bottlenck is at 3
+#    |               |
+#    |       |       |
+#    |       √       |
+#    |               |
+#         |     |
+#         |     |
+#         |     |
+#         |     |
+
+preprocessing:
+  system_observables:
+    - density
+    - velocity_x
+    - velocity_y
+  store_tsc_data: true
+data:
+  load_data_from_checkpoint: '20260218_160403'
+algorithm:
+  learning_algo: edmd
+  sort_koopman_triplets: false
+  pseudospectrum_residual_filter:
+    keep_n: 400
+  use_temporal_embedding: true
+  rank: 400
+  use_diffusion_maps: false
+visualization:
+  compute_pseudospectrum: true
+  plot_supermodes: false
+  visualization_timesteps:
+    - 0
+    - 25
+    - 50
+    - 100
+    - 125
+  generate_timeseries_gifs: null
+evaluation:
+  store_trained_model: true
+  extra_prediction_steps: 50
+temporal_embedding:
+  num_t_delays: 4
+  frequency: 3
+  lag: 0

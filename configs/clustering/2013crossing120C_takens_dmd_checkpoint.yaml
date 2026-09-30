@@ -1,0 +1,37 @@
+# Experiment documentation: http://ped.fz-juelich.de/da/2013crossing120
+# 120 degrees crossing with people walking into all directions
+# hence we need to cut from all sides, with the lower right corner at (0,0) after shifting
+
+preprocessing:
+  system_observables:
+    - density
+    - velocity_x
+    - velocity_y
+  store_tsc_data: true
+data:
+  load_data_from_checkpoint: '20250711_074452'
+algorithm:
+  learning_algo: edmd
+  sort_koopman_triplets: false
+  pseudospectrum_residual_filter:
+    keep_n: 400
+  use_temporal_embedding: true
+  rank: 400
+  use_diffusion_maps: false
+visualization:
+  compute_pseudospectrum: true
+  plot_supermodes: false
+  visualization_timesteps:
+    - 0
+    - 50
+    - 100
+    - 170
+    - 230
+  generate_timeseries_gifs: null
+evaluation:
+  store_trained_model: true
+  extra_prediction_steps: 50
+temporal_embedding:
+  num_t_delays: 4
+  frequency: 3
+  lag: 0

@@ -1,0 +1,94 @@
+# Experiment documentation:http://ped.fz-juelich.de/da/2022wheelchair_luggage_bottleneck
+# Input orientation: people walk from the left to the right, with normal speed (B)
+# these experiments here are only the baseline (no luggage, no wheelchairs)
+# we cut off the starting positions from the left and the end off the right
+# bottleneck starts at 7 with a 1m corridor
+#     ______________
+#                   |
+#                   |____________
+#
+#           -->
+#                    ____________
+#                   |
+#     ______________|
+
+meta:
+  scenario: 2022wheelchair_luggage_bottleneck
+  raw_data_dir: data/juelich_trajectories
+preprocessing:
+  average_across_simulations: false
+  grid_resolution: 0.4
+  temporal_resolution: 0.2
+  interpolate: true
+  xlim:
+    - 3.2
+    - 8
+  ylim:
+    - 0
+    - 5.6
+  tlim:
+    - 0
+    - null
+  system_observables:
+    - count
+    - density
+    - velocity_x
+    - velocity_y
+  spatial_smoothing_bandwidth: 1.2
+  spatial_smoothing_neighborhood: 5
+  store_tsc_data: false
+data:
+  selection_parameters:
+    - 1AM030.txt
+    - 1AM050.txt
+    - 1AM090.txt
+    - 1AM110.txt
+    - 1AM130.txt
+    - 1AM150.txt
+    - 1AM160.txt
+    - 1AM180.txt
+    - 1AM200.txt
+    - 1AM230.txt
+    - 1AM250.txt
+    - 1AM270.txt
+    - 1AM300.txt
+    - 1AM320.txt
+    - 1AM340.txt
+algorithm:
+  learning_algo: dmd
+  sort_koopman_triplets: false
+  rank: 100
+visualization:
+  vector_scaling: 0.2
+  compute_pseudospectrum: false
+  plot_supermodes: false
+  plot_diffusion_maps: false
+  visualization_timesteps:
+    - 0
+    - 20
+    - 40
+    - 60
+  generate_timeseries_gifs:
+    - 1001030
+    - 1001050
+    - 1001090
+    - 1001110
+    - 1001130
+    - 1001150
+    - 1001160
+    - 1001180
+    - 1001200
+    - 1001230
+    - 1001250
+    - 1001270
+    - 1001300
+    - 1001320
+    - 1001340
+  rotation: 90
+evaluation:
+  store_trained_model: false
+  extra_prediction_steps: 50
+  measurement_cells:
+    - (8_5)
+    - (10_5)
+    - (7_3)

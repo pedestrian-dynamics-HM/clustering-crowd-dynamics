@@ -1,0 +1,85 @@
+# Experiment documentation: https://ped.fz-juelich.de/da/2009tjunction
+# Input orientation: people walk from the bottom to the top
+# we may cut from both sides and the top
+#             |       |
+#             |       |
+#             |   ^   |
+#   __________|   |   |__________
+#
+#   _____________________________
+
+meta:
+  scenario: 2009tjunction
+  raw_data_dir: data/juelich_trajectories
+preprocessing:
+  average_across_simulations: false
+  grid_resolution: 0.4
+  temporal_resolution: 0.2
+  interpolate: true
+  xlim:
+    - 0.4
+    - 8.4
+  ylim:
+    - null
+    - 6.4
+  tlim:
+    - 0
+    - null
+  system_observables:
+    - count
+    - density
+    - velocity_x
+    - velocity_y
+  spatial_smoothing_bandwidth: 0.8
+  spatial_smoothing_neighborhood: 3
+  obstacle_scaling: 0
+  store_tsc_data: false
+data:
+  selection_parameters:
+    - ko-240-050-240.txt
+    - ko-240-060-240.txt
+    - ko-240-080-240.txt
+    - ko-240-100-240.txt
+    - ko-240-120-240.txt
+    - ko-240-150-240.txt
+    - ko-240-240-240.txt
+    - ko-300-050-300.txt
+    - ko-300-080-300.txt
+    - ko-300-120-300.txt
+    - ko-300-150-300.txt
+algorithm:
+  learning_algo: dmd
+  sort_koopman_triplets: false
+  rank: 100
+visualization:
+  compute_pseudospectrum: false
+  plot_supermodes: false
+  plot_diffusion_maps: false
+  vector_scaling: 0.3
+  visualization_timesteps:
+    - 0
+    - 40
+    - 80
+    - 120
+    - 160
+    - 200
+  generate_timeseries_gifs:
+    - 100240050240
+    - 100240060240
+    - 100240080240
+    - 100240100240
+    - 100240120240
+    - 100240150240
+    - 100240240240
+    - 100300050300
+    - 100300080300
+    - 100300120300
+    - 100300150300
+  rotation: 180
+evaluation:
+  store_trained_model: false
+  extra_prediction_steps: 50
+  measurement_cells:
+    - (4_4)
+    - (13_4)
+    - (9_8)

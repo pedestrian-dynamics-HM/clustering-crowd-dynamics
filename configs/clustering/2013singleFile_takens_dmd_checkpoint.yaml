@@ -1,0 +1,48 @@
+# Experiment documentation: http://ped.fz-juelich.de/da/2013singleFile
+# Input orientation: people walk on a oval track (NOT 1d_ prefix)
+# coordinates are transformed into walking left to right
+# we may cut off start and end but do not need to
+#              _________________
+#           /                    \
+#         /      ____________      \
+#       /      /              \      \
+#      /      /                \      \
+#      |     |                  |      |
+#       \     \                /      /
+#        \      \ ___________ /      /
+#          \                       /
+#            \ _________________ /
+
+preprocessing:
+  system_observables:
+    - density
+    - velocity_x
+    - velocity_y
+  store_tsc_data: true
+data:
+  load_data_from_checkpoint: '20250711_084741'
+algorithm:
+  learning_algo: edmd
+  sort_koopman_triplets: false
+  pseudospectrum_residual_filter:
+    keep_n: 400
+  use_temporal_embedding: true
+  rank: 400
+  use_diffusion_maps: false
+visualization:
+  compute_pseudospectrum: true
+  plot_supermodes: false
+  visualization_timesteps:
+    - 0
+    - 40
+    - 80
+    - 120
+    - 160
+  generate_timeseries_gifs: null
+evaluation:
+  store_trained_model: true
+  extra_prediction_steps: 50
+temporal_embedding:
+  num_t_delays: 4
+  frequency: 3
+  lag: 0

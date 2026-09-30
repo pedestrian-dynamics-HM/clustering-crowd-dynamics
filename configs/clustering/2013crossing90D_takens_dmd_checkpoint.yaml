@@ -1,0 +1,49 @@
+# Experiment documentation: https://ped.fz-juelich.de/da/2013crossing90
+# Input orientation: people walk into and out of the crossing in various directions
+# we may cut from all sides
+#             |        |
+#             |  ^  √  |
+#             |  ^  √  |
+#   __________|        |__________
+#
+#       < <        ∆       > >
+#       > >                < <
+#   __________          __________
+#             |        |
+#             |        |
+#             |  ^  √  |
+#             |  ^   √ |
+
+preprocessing:
+  system_observables:
+    - density
+    - velocity_x
+    - velocity_y
+  store_tsc_data: true
+data:
+  load_data_from_checkpoint: '20250731_124110'
+algorithm:
+  learning_algo: edmd
+  sort_koopman_triplets: false
+  pseudospectrum_residual_filter:
+    keep_n: 400
+  use_temporal_embedding: true
+  rank: 400
+  use_diffusion_maps: false
+visualization:
+  compute_pseudospectrum: true
+  plot_supermodes: false
+  visualization_timesteps:
+    - 0
+    - 25
+    - 50
+    - 80
+    - 100
+  generate_timeseries_gifs: null
+evaluation:
+  store_trained_model: true
+  extra_prediction_steps: 50
+temporal_embedding:
+  num_t_delays: 4
+  frequency: 3
+  lag: 0

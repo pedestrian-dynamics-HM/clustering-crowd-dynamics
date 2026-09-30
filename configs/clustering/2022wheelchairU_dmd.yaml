@@ -1,0 +1,100 @@
+# Experiment documentation:http://ped.fz-juelich.de/da/2022wheelchair_luggage_bottleneck
+# Input orientation: people walk from the left to the right, with urgency (U)
+# these experiments here are only the baseline (no luggage, no wheelchairs)
+# we cut off the starting positions from the left and the end off the right
+# bottleneck starts at 7 with a 1m corridor
+#     ______________
+#                   |
+#                   |____________
+#
+#           -->
+#                    ____________
+#                   |
+#     ______________|
+
+meta:
+  scenario: 2022wheelchair_luggage_bottleneck
+  raw_data_dir: data/juelich_trajectories
+preprocessing:
+  average_across_simulations: false
+  grid_resolution: 0.4
+  temporal_resolution: 0.2
+  interpolate: true
+  xlim:
+    - 3.2
+    - 8
+  ylim:
+    - 0
+    - 5.6
+  tlim:
+    - 0
+    - null
+  system_observables:
+    - count
+    - density
+    - velocity_x
+    - velocity_y
+  spatial_smoothing_bandwidth: 1.2
+  spatial_smoothing_neighborhood: 5
+  store_tsc_data: false
+data:
+  selection_parameters:
+    - 1AM020.txt
+    - 1AM040.txt
+    - 1AM060.txt
+    - 1AM080.txt
+    - 1AM100.txt
+    - 1AM120.txt
+    - 1AM140.txt
+    - 1AM170.txt
+    - 1AM190.txt
+    - 1AM210.txt
+    - 1AM220.txt
+    - 1AM240.txt
+    - 1AM260.txt
+    - 1AM280.txt
+    - 1AM290.txt
+    - 1AM310.txt
+    - 1AM330.txt
+    - 1AM350.txt
+algorithm:
+  learning_algo: dmd
+  sort_koopman_triplets: false
+  rank: 100
+visualization:
+  vector_scaling: 0.2
+  compute_pseudospectrum: false
+  plot_supermodes: false
+  plot_diffusion_maps: false
+  visualization_timesteps:
+    - 0
+    - 20
+    - 40
+    - 60
+  generate_timeseries_gifs:
+    - 1001020
+    - 1001040
+    - 1001060
+    - 1001080
+    - 1001100
+    - 1001120
+    - 1001140
+    - 1001170
+    - 1001190
+    - 1001210
+    - 1001220
+    - 1001240
+    - 1001260
+    - 1001280
+    - 1001290
+    - 1001310
+    - 1001330
+    - 1001350
+  rotation: 90
+evaluation:
+  store_trained_model: false
+  extra_prediction_steps: 50
+  measurement_cells:
+    - (8_5)
+    - (10_5)
+    - (7_3)

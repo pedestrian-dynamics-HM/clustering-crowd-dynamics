@@ -1,0 +1,74 @@
+# Experiment documentation: http://ped.fz-juelich.de/da/2013unidirectional
+# Input orientation: people walk from the left to the right
+# some experiments needed to be flipped
+# we cut off the starting positions from the left and the end off the right
+#
+#    _______________________
+#
+#           -->
+#    _______________________
+#
+
+meta:
+  scenario: 2013unidirectionalC
+  raw_data_dir: data/juelich_trajectories
+preprocessing:
+  average_across_simulations: false
+  grid_resolution: 0.4
+  temporal_resolution: 0.2
+  interpolate: true
+  xlim:
+    - 1
+    - 9
+  ylim:
+    - null
+    - 7
+  tlim:
+    - 0
+    - null
+  system_observables:
+    - count
+    - density
+    - velocity_x
+    - velocity_y
+  spatial_smoothing_bandwidth: 0.8
+  spatial_smoothing_neighborhood: 3
+  obstacle_scaling: 0
+  store_tsc_data: false
+data:
+  selection_parameters:
+    - traj_UNI_CORR_500_01.txt
+    - traj_UNI_CORR_500_02.txt
+    - traj_UNI_CORR_500_03.txt
+    - traj_UNI_CORR_500_04.txt
+    - traj_UNI_CORR_500_05.txt
+algorithm:
+  learning_algo: dmd
+  sort_koopman_triplets: false
+  rank: 100
+visualization:
+  compute_pseudospectrum: false
+  plot_supermodes: false
+  plot_diffusion_maps: false
+  vector_scaling: 0.2
+  visualization_timesteps:
+    - 0
+    - 40
+    - 80
+    - 120
+    - 160
+    - 200
+  generate_timeseries_gifs:
+    - 10050005
+    - 10050004
+    - 10050003
+    - 10050002
+    - 10050001
+  rotation: 90
+evaluation:
+  store_trained_model: false
+  extra_prediction_steps: 50
+  measurement_cells:
+    - (6_7)
+    - (10_7)
+    - (14_7)

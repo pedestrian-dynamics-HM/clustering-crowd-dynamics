@@ -1,0 +1,101 @@
+# Experiment documentation: https://ped.fz-juelich.de/da/2013crossing90
+# Input orientation: people walk into and out of the crossing in various directions
+# we may cut from all sides
+#             |        |
+#             |  ^  √  |
+#             |  ^  √  |
+#   __________|        |__________
+#
+#       < <        ∆       > >
+#       > >                < <
+#   __________          __________
+#             |        |
+#             |        |
+#             |  ^  √  |
+#             |  ^   √ |
+
+meta:
+  scenario: 2013crossing90
+  raw_data_dir: data/juelich_trajectories
+preprocessing:
+  average_across_simulations: false
+  grid_resolution: 0.4
+  temporal_resolution: 0.2
+  interpolate: true
+  xlim:
+    - 0
+    - 8.8
+  ylim:
+    - 0
+    - 4.8
+  tlim:
+    - 0
+    - null
+  system_observables:
+    - count
+    - density
+    - velocity_x
+    - velocity_y
+  spatial_smoothing_bandwidth: 0.8
+  spatial_smoothing_neighborhood: 3
+  store_tsc_data: false
+data:
+  selection_parameters:
+    - crossing_90_a1_01.txt
+    - crossing_90_a1_02.txt
+    - crossing_90_a1_03.txt
+    - crossing_90_a1_04.txt
+    - crossing_90_a1_05.txt
+    - crossing_90_a1_06.txt
+    - crossing_90_a1_07.txt
+    - crossing_90_a1_08.txt
+    - crossing_90_a1_09.txt
+    - crossing_90_a1_10.txt
+algorithm:
+  learning_algo: dmd
+  sort_koopman_triplets: false
+  rank: 200
+visualization:
+  vector_scaling: 0.3
+  compute_pseudospectrum: false
+  plot_supermodes: false
+  plot_diffusion_maps: false
+  visualization_timesteps:
+    - 0
+    - 100
+    - 200
+    - 300
+    - 400
+  generate_timeseries_gifs:
+    - 10090101
+    - 10090102
+    - 10090103
+    - 10090104
+    - 10090105
+    - 10090106
+    - 10090107
+    - 10090108
+    - 10090109
+    - 10090110
+    - 10090202
+    - 10090203
+    - 10090204
+    - 10090205
+    - 10090206
+    - 10090207
+    - 10090301
+    - 10090302
+    - 10090303
+    - 10090304
+    - 10090305
+    - 10090306
+    - 10090307
+    - 10090308
+  rotation: 0
+evaluation:
+  store_trained_model: false
+  extra_prediction_steps: 50
+  measurement_cells:
+    - (12_2)
+    - (12_8)
+    - (4_5)

@@ -1,0 +1,82 @@
+# Experiment documentation: http://ped.fz-juelich.de/da/2013bidirectional
+# Input orientation: people walking up and down with instructions on the side of exit to use
+# hence we only want to cut from the top and bottom
+#    |         |
+#    |         |
+#    |  |   ^  |
+#    |  √   |  |
+#    |         |
+#    |         |
+#    |         |
+
+meta:
+  scenario: 2013bidirectional_B
+  raw_data_dir: data/juelich_trajectories
+preprocessing:
+  average_across_simulations: false
+  grid_resolution: 0.4
+  temporal_resolution: 0.2
+  interpolate: true
+  xlim:
+    - 1.2
+    - 10.8
+  ylim:
+    - 0
+    - 6
+  tlim:
+    - 0
+    - null
+  system_observables:
+    - count
+    - density
+    - velocity_x
+    - velocity_y
+  spatial_smoothing_bandwidth: 1.2
+  spatial_smoothing_neighborhood: 5
+  store_tsc_data: false
+data:
+  selection_parameters:
+    - bi_corr_400_b_01.txt
+    - bi_corr_400_b_02.txt
+    - bi_corr_400_b_03.txt
+    - bi_corr_400_b_04.txt
+    - bi_corr_400_b_05.txt
+    - bi_corr_400_b_06.txt
+    - bi_corr_400_b_07.txt
+    - bi_corr_400_b_08.txt
+    - bi_corr_400_b_09.txt
+    - bi_corr_400_b_10.txt
+algorithm:
+  learning_algo: dmd
+  sort_koopman_triplets: false
+  rank: 200
+visualization:
+  vector_scaling: 0.1
+  compute_pseudospectrum: false
+  plot_supermodes: false
+  plot_diffusion_maps: false
+  visualization_timesteps:
+    - 0
+    - 25
+    - 50
+    - 100
+    - 125
+  generate_timeseries_gifs:
+    - 10040001
+    - 10040002
+    - 10040003
+    - 10040004
+    - 10040005
+    - 10040006
+    - 10040007
+    - 10040008
+    - 10040009
+    - 10040010
+  rotation: 90
+evaluation:
+  store_trained_model: false
+  extra_prediction_steps: 50
+  measurement_cells:
+    - (10_4)
+    - (6_7)
+    - (6_10)

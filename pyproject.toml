@@ -1,0 +1,216 @@
+[build-system]
+requires = ["uv_build >= 0.9.2, <0.10.0"]
+build-backend = "uv_build"
+
+# ----------------------------------------------------------------------------
+
+# Most of the settings here are general for all build systems, but here is a
+# reference for setuptools.
+# https://setuptools.pypa.io/en/latest/references/keywords.html
+
+[project]
+name = "dynamics-analysis-with-koopman"
+#dynamic = ["version"]
+version = "0.0.1"
+authors = [
+    { name = "Sabrina Kern", email = "sabrina.kern@hm.edu" },
+]
+maintainers = [
+    { name = "Sabrina Kern", email = "sabrina.kern@hm.edu" },
+]
+description = "Koopman operator analysis of pedestrian dynamics from trajectory data, built on datafold."
+readme = "README.md"
+requires-python = ">=3.10, <3.12"
+license = "MIT"
+license-files = ["LICENSE", "patch/datafold/LICENSE"]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "datafold==2.0.1",
+    # pandas < 2.1 must not be used: its C float parser is not correctly rounded and
+    # reads '36.599999999999994' from the trajectory files as 36.6. That one ULP moves
+    # a frame across a 0.2s step boundary in int(simTime / temporal_resolution), which
+    # changes the discretized grids for every dataset recorded at 0.04s (25 fps).
+    # The published 2025 runs were produced with 2.2/2.3; 2.0.3 does not reproduce them.
+    "pandas>=2.2,<3",
+    # numba requires numpy <= 1.26 and datafold requires >= 1.25.
+    "numpy>=1.25,<1.27",
+    "numba",
+    # pinned to the version the published figures were made with; other versions
+    # can write the same figure with different SVG markup
+    "matplotlib==3.10.7",
+    "dill",
+    "pyyaml",
+    "click",
+    "plotly",
+    "seaborn>=0.12.0",
+    "colorlog",
+    "gitpython",
+]
+
+[project.scripts]
+koopman-train = "dynamics_analysis_with_koopman.main:main"
+
+[project.optional-dependencies]
+# to execute the notebooks in papers/clustering
+notebook = [
+    "jupyter",
+    "networkx",
+]
+
+dev = [
+    "ruff>=0.14.0",
+]
+
+# ----------------------------------------------------------------------------
+
+[tool.uv]
+required-environments = [
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+    "sys_platform == 'linux' and platform_machine == 'x86_64'"
+]
+
+# ----------------------------------------------------------------------------
+
+[tool.ruff]
+# Read-only by default. Opt in explicitly with `ruff check --fix` when that is 
+# what you want.
+fix = false
+force-exclude = true
+# indent-width and line-length match .editorconfig (indent_size, max_line_length)
+indent-width = 4
+line-length = 120
+
+extend-exclude = [
+    "tests",
+    "docs",
+    "__pycache__",
+    "*.egg-info",
+    "_version.py",
+    # Modified copies of datafold 2.0.1; neither lint nor format them, so they
+    # stay diffable against upstream.
+    "patch/datafold",
+]
+
+[tool.ruff.lint]
+# Narrowed from the template's `select = ["ALL"]`, which flagged ~1300
+# violations across src/ and so was never actually runnable. This set is
+# defect-focused -- undefined names, unused imports/variables, likely bugs --
+# rather than style. It currently reports ~49 findings in src/, all individually
+# actionable; the goal is to drive that to zero and then widen deliberately,
+# not to go back to "ALL".
+select = [
+    "F", # pyflakes: undefined names, unused imports and variables
+    "E4", # pycodestyle: import placement
+    "E7", # pycodestyle: statement-level errors (comparisons, ambiguous names)
+    "E9", # pycodestyle: syntax and IO errors
+    "B", # flake8-bugbear: likely bugs, e.g. B006 mutable default arguments
+    "C4", # flake8-comprehensions
+    "RUF", # ruff-specific checks
+]
+
+# Applies only when `--fix` is passed explicitly, since `fix` is false above.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+ignore = [
+    # pydocstyle (E, W)
+
+    "E111", # Rule enforced by formatter
+    "E114", # Rule enforced by formatter
+    "E117", # Rule enforced by formatter
+    "W191", # Rule enforced by formatter
+
+    # pydocstyle (D)
+
+    # Missing docstring in magic method
+    "D105",
+    # Missing docstring in __init__
+    "D107",
+    "D206", # Rule enforced by formatter
+    "D300", # Rule enforced by formatter
+
+    # flake-badit (S)
+
+    # blacklist: pseudo-random generators are not suitable for
+    # security/cryptographic purposes, which is not the case in this project
+    "S311",
+    "S101",
+    # flake-commas (COM)
+    "COM812", # Rule enforced by formatter
+    "COM819", # Rule enforced by formatter
+
+    # flake-implicit-str-concat (ISC)
+    "ISC001", # Rule enforced by formatter
+    "ISC002", # Rule enforced by formatter
+
+    # flake-unused-arguments (ARG)
+    # Ignore argument checker that might conflict mypy's signature checking
+    # Here all but one are ignored consider ignoring all rules (ARG)
+    "ARG001",
+    "ARG002",
+    "ARG003",
+    "ARG004",
+    # Ignored whole error groups as not convenient for this project
+    "C90",
+    #"N",
+    "ANN",
+    "ASYNC",
+    "ASYNC1",
+    "FBT",
+    "CPY",
+    "T10",
+    "DJ",
+    "EXE",
+    "FA",
+    # "ICN",
+    "G",
+    "PT",
+    "Q",
+    "RSE",
+    "INT",
+    "TD",
+    "FIX",
+    "ERA",
+    "PL",
+    "TRY",
+    "AIR",
+    "FURB",
+    # --- Pervasive-but-benign in this codebase; revisit rather than churn ---
+    # 26 log messages use f-strings with no placeholder. Harmless, and rewriting
+    # them all would bury the real findings in noise.
+    "F541",
+    # zip(...) without strict=: 29 sites, all zipping deliberately-equal-length
+    # sequences. Worth adopting, but as its own pass.
+    "B905",
+    # Style preferences rather than defects.
+    "RUF005",
+    "RUF012",
+    "C408",
+]
+
+[tool.ruff.format]
+
+quote-style = "single"
+
+# Indent with spaces, as indent_style in .editorconfig.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Always write LF, as end_of_line in .editorconfig.
+line-ending = "lf"
+
+docstring-code-format = false
+docstring-code-line-length = "dynamic"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
